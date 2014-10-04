@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="pros.cordova.Application"
+    version="0.1.0">
+
+    <name>Application</name>
+    <description>
+        This plugin provides application and device information
+    </description>
+
+    <license>Apache 2.0</license>
+    
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
+
+    <js-module src="www/AppPlugin.js">
+       <clobbers target="plugins.Application" />
+    </js-module>
+	
+    <!-- wp8 -->
+    <platform name="wp8">
+        <config-file target="config.xml" parent="/*">
+            <feature name="Application">
+                <param name="wp-package" value="Application"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/wp8/Application.cs" />
+    </platform>	
+</plugin>
