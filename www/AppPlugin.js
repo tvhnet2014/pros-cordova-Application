@@ -7,6 +7,13 @@ module.exports = {
             success,
             fail,
             'Application', 'getDeviceID', []);
+    },
+
+    openSMS: function (phone, message, success, fail) {
+        exec(
+            success,
+            fail,
+            'Application', 'openSMS', [phone, message]);
     }
 
 };
