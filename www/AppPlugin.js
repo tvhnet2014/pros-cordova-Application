@@ -1,10 +1,10 @@
-var appChannel = require('cordova/channel'),
-    appUtils = require('cordova/utils'),
+var channel = require('cordova/channel'),
+    utils = require('cordova/utils'),
     exec = require('cordova/exec');
 
-appChannel.createSticky('onCordovaInfoReady');
-// Tell cordova channel to wait on the CordovaInfoReady event
-appChannel.waitForInitialization('onCordovaInfoReady');
+channel.createSticky('onCordovaApplicationInfoReady');
+// Tell cordova channel to wait on the onCordovaApplicationInfoReady event
+channel.waitForInitialization('onCordovaApplicationInfoReady');
 
 /**
  * @constructor
@@ -16,15 +16,15 @@ function Application() {
 
     var me = this;
 
-    appChannel.onCordovaReady.subscribe(function () {
+    channel.onCordovaReady.subscribe(function () {
         me.init(function (info) {
             me.available = true;
             me.appVersion = info.appVersion;
             me.deviceID = info.deviceID;
-            appChannel.onCordovaInfoReady.fire();
+            channel.onCordovaApplicationInfoReady.fire();
         }, function (e) {
             me.available = false;
-            appUtils.alert("[ERROR] Error initializing Application plugin: " + e);
+            utils.alert("[ERROR] Error initializing Application plugin: " + e);
         });
     });
 }
