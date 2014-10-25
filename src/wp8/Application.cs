@@ -14,13 +14,26 @@ namespace Cordova.Extension.Commands
 {
     public class Application : BaseCommand
     {
-        public void getDeviceID(string empty)
+		public void getDeviceID(string options)
         {
            byte[] uniqueIDbytes = (byte[])DeviceExtendedProperties.GetValue("DeviceUniqueId");
            string uniqueID = System.Convert.ToBase64String(uniqueIDbytes);
 
            this.DispatchCommandResult(new PluginResult(PluginResult.Status.OK, uniqueID));
         }
+
+		public void getVersion(string options)
+		{
+			string version = "unknown";
+			XElement manifestAppElement = XDocument.Load("WMAppManifest.xml").Root.Element("App");
+
+			if (manifestAppElement != null && manifestAppElement.Attribute("Version") != null)
+			{
+				version = manifestAppElement.Attribute("Version").Value;
+			}
+
+			this.DispatchCommandResult(new PluginResult(PluginResult.Status.OK, version));
+		}
 
 		public void openSMS(string options)
 		{
