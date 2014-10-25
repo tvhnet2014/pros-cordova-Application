@@ -12,27 +12,17 @@ using System.Xml.Linq;
 
 namespace Cordova.Extension.Commands
 {
-    public class Application : BaseCommand
-    {
-		public void getDeviceID(string options)
-        {
-           byte[] uniqueIDbytes = (byte[])DeviceExtendedProperties.GetValue("DeviceUniqueId");
-           string uniqueID = System.Convert.ToBase64String(uniqueIDbytes);
-
-           this.DispatchCommandResult(new PluginResult(PluginResult.Status.OK, uniqueID));
-        }
-
-		public void getVersion(string options)
+	public class Application : BaseCommand
+	{
+		public void init(string notUsed)
 		{
-			string version = "unknown";
-			XElement manifestAppElement = XDocument.Load("WMAppManifest.xml").Root.Element("App");
+			string res = String.Format("\"deviceID\":\"{0}\",\"appVersion\":\"{1}\"",
+										this.deviceID,
+										this.appVersion);
 
-			if (manifestAppElement != null && manifestAppElement.Attribute("Version") != null)
-			{
-				version = manifestAppElement.Attribute("Version").Value;
-			}
-
-			this.DispatchCommandResult(new PluginResult(PluginResult.Status.OK, version));
+			res = "{" + res + "}";
+			//Debug.WriteLine("Result::" + res);
+			DispatchCommandResult(new PluginResult(PluginResult.Status.OK, res));
 		}
 
 		public void openSMS(string options)
@@ -46,5 +36,30 @@ namespace Cordova.Extension.Commands
 			task.To = number;
 			task.Show();
 		}
-    }
+
+		private string deviceID
+		{
+			get
+			{
+				byte[] uniqueIDbytes = (byte[])DeviceExtendedProperties.GetValue("DeviceUniqueId");
+				return System.Convert.ToBase64String(uniqueIDbytes);
+			}
+		}
+
+		private string appVersion
+		{
+			get
+			{
+				string version = "unknown";
+				XElement manifestAppElement = XDocument.Load("WMAppManifest.xml").Root.Element("App");
+
+				if (manifestAppElement != null && manifestAppElement.Attribute("Version") != null)
+				{
+					version = manifestAppElement.Attribute("Version").Value;
+				}
+
+				return version;
+			}
+		}
+	}
 }

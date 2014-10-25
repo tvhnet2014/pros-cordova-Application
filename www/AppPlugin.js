@@ -1,26 +1,60 @@
-var exec = require('cordova/exec');
+var channel = require('cordova/channel'),
+    utils = require('cordova/utils'),
+    exec = require('cordova/exec');
 
-module.exports = {
+channel.createSticky('onCordovaInfoReady');
+// Tell cordova channel to wait on the CordovaInfoReady event
+channel.waitForInitialization('onCordovaInfoReady');
 
-    getDeviceID: function (success, fail) {
-        exec(
-            success,
-            fail,
-            'Application', 'getDeviceID', []);
-    },
+/**
+ * @constructor
+ */
+function Application() {
+    this.available = false;
+    this.appVersion = null;
+    this.deviceID = null;
 
-    getVersion: function (success, fail) {
-        exec(
-            success,
-            fail,
-            'Application', 'getVersion', []);
-    },
+    var me = this;
 
-    openSMS: function (phone, message, success, fail) {
-        exec(
-            success,
-            fail,
-            'Application', 'openSMS', [phone, message]);
-    }
+    channel.onCordovaReady.subscribe(function () {
+        me.init(function (info) {
+            me.available = true;
+            me.appVersion = info.appVersion;
+            me.deviceID = info.deviceID;
+            channel.onCordovaInfoReady.fire();
+        }, function (e) {
+            me.available = false;
+            utils.alert("[ERROR] Error initializing Application plugin: " + e);
+        });
+    });
+}
 
+/**
+ * init
+ *
+ * @param {Function} successCallback The function to call when the heading data is available
+ * @param {Function} errorCallback The function to call when there is an error getting the heading data. (OPTIONAL)
+ */
+Application.prototype.init = function (successCallback, errorCallback) {
+    exec(
+        successCallback,
+        errorCallback,
+        "Application", "init", []);
 };
+
+/**
+ * openSMS
+ *
+ * @param {String} phone Phone number
+ * @param {String} message Body text
+ * @param {Function} successCallback The function to call when the heading data is available
+ * @param {Function} errorCallback The function to call when there is an error getting the heading data. (OPTIONAL)
+ */
+Application.prototype.openSMS = function (phone, message, successCallback, errorCallback) {
+    exec(
+        successCallback,
+        errorCallback,
+        'Application', 'openSMS', [phone, message]);
+};
+
+module.exports = new Application();
