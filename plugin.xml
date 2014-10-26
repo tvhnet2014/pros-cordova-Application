@@ -2,7 +2,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="pros.cordova.application"
-    version="0.3.0">
+    version="0.4.0">
 
     <name>Application</name>
     <description>
@@ -19,6 +19,29 @@
        <clobbers target="plugins.Application" />
     </js-module>
 	
+	<!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="Application" >
+                <param name="android-package" value="pros.cordova.application.Application"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/Application.java" target-dir="src/pros/cordova/application" />
+    </platform>
+	
+	<!-- ios -->
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="Application">
+                <param name="ios-package" value="CDVApplication"/>
+            </feature>
+        </config-file>
+
+        <header-file src="src/ios/CDVApplication.h" />
+        <source-file src="src/ios/CDVApplication.m" />
+    </platform>
+
     <!-- wp8 -->
     <platform name="wp8">
         <config-file target="config.xml" parent="/*">
