@@ -9,6 +9,7 @@ using WPCordovaClassLib.Cordova.Commands;
 using WPCordovaClassLib.Cordova.JSON;
 using Windows.ApplicationModel;
 using System.Xml.Linq;
+using Windows.System;
 
 namespace Cordova.Extension.Commands
 {
