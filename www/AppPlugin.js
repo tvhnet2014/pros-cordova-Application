@@ -57,4 +57,17 @@ Application.prototype.openSMS = function (phone, message, successCallback, error
         'Application', 'openSMS', [phone, message]);
 };
 
+
+/**
+ * openFacebookPage
+ *
+ * @param {String} facebookPageID
+ */
+Application.prototype.openFacebookPage = function (facebookPageID, successCallback, errorCallback) {
+    exec(
+        successCallback,
+        errorCallback,
+        'Application', 'openFacebookPage', [facebookPageID]);
+};
+
 module.exports = new Application();

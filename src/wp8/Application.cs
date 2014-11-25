@@ -37,6 +37,14 @@ namespace Cordova.Extension.Commands
 			task.Show();
 		}
 
+		public void openFacebookPage(string options)
+		{
+			string[] optValues = JsonHelper.Deserialize<string[]>(options);
+			String facebookPageID = optValues[0];
+
+			Launcher.LaunchUriAsync(new Uri("fb:pages?id=" + facebookPageID));
+		}
+
 		private string deviceID
 		{
 			get
